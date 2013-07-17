@@ -1,3 +1,4 @@
+var fullData = [];
 var statusesData = [];
 var idStatusMap = [];
 var filterStatuses = [];
@@ -14,31 +15,64 @@ $(document).ready(function(){
 		mapWidth = $("#map-img").width();
 		mapHeight = $("#map-img").height();
 		mapSVG = d3.select("#map-wrapper")
-		.append("svg")
-		.attr("id", "map-svg")
-		.attr("width", mapWidth)
-		.attr("height", mapHeight);
+			.append("svg")
+			.attr("id", "map-svg")
+			.attr("width", mapWidth)
+			.attr("height", mapHeight)
 
 		$("#map-svg")
-		.css("left", $("#map-img").position().left)
-		.css("top", $("#map-img").position().top);
+			.css("left", $("#map-img").position().left)
+			.css("top", $("#map-img").position().top);
+
+		enableMapBrushed();
+
+		// d3.json("fulldata.json", function(json) {
+		// 	for (var d in json){
+		// 		fullData.push(json[d]);
+		// 		idStatusMap[json[d].id] = json[d];
+		// 	}
+		// 	fullData = fullData.slice(0, 1000);
+		// 	// timelineBinStatics = computeTimeline(statusesData);
+		// 	// drawDataOnMap(statusesData);
+		// 	// drawTimeline();
+		// 	console.log("fulldata end");
+		// 	var start = new Date();
+		// 	var j = 0
+		// 	for (var i in fullData)
+		// 	{j += fullData[i].uid}
+		// 	console.log(j);
+		// 	console.log(new Date().getTime() - start);
+		// });
 
 		d3.json("data.json", function(json) {
 			readData(json);
 			timelineBinStatics = computeTimeline(statusesData);
 			drawDataOnMap(statusesData);
 			drawTimeline();
+
 		});
+
+
 	});
 })
 
+function enableMapBrushed(){
+	mapSVG.append("g")
+	.attr("class", "brush")
+	.call(
+		d3.svg.brush()
+			.x(d3.scale.linear().range([0, mapWidth]))
+			.y(d3.scale.linear().range([0, mapHeight]))
+			.on("brushend", function(){console.log(d3.event.target.extent());})
+	);
+}
 
 function readData(json){
 	for (var d in json){
 		statusesData.push(json[d]);
 		idStatusMap[json[d].id] = json[d];
 	}
-	statusesData = statusesData.slice(0, 10000);
+	statusesData = statusesData.slice(0, 1000);
 }
 
 function computeTimeline(data){
@@ -65,6 +99,17 @@ function drawDataOnMap(data){
 	.attr("transform", function(d){
 		var pos = geoMapping(d.lat, d.lng, mapWidth, mapHeight);
 		return "translate(" + pos[0] + "," + pos[1] + ")";
+	})
+	.each(function(d){
+		$(this).tipsy({
+			gravity: "e", 
+			html: true,
+			opacity: 1,
+			title: function() {
+				var d = this.__data__;
+				return renderTipHtml(d);
+			}
+		})
 	});
 	
 
@@ -202,4 +247,14 @@ function drawTimeline(){
 
 	}
 
+}
+
+
+function renderTipHtml(data){
+	var html = "<div class='tip'>" +
+		"<p><b>用户id:" + data.uid + "</b></p>" + 
+		"<p>" + data.text + "</p>" +
+		"<p><span>" + data.time_str + "</span></p>" +
+		"</div>";
+	return html;
 }
