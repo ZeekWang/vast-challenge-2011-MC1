@@ -1,18 +1,8 @@
-#map-wrap {
-	position: absolute;
-}
-
-#map-img{
-	position: absolute;
-}
 
 #map-svg{
 	position: absolute;
 }
 
-#map-canvas{
-	position: absolute;
-}
 .status-node{
 	fill: rgba(200, 0, 0, 0.5);
 }
@@ -37,8 +27,6 @@ path {
   shape-rendering: crispEdges;
 }
 
-
 #timeline {
-	position:absolute;
-	top: 500px;
+	margin-top: 20px;
 }
