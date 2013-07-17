@@ -1,0 +1,44 @@
+#map-wrap {
+	position: absolute;
+}
+
+#map-img{
+	position: absolute;
+}
+
+#map-svg{
+	position: absolute;
+}
+
+#map-canvas{
+	position: absolute;
+}
+.status-node{
+	fill: rgba(200, 0, 0, 0.5);
+}
+
+svg {
+  font: 10px sans-serif;
+}
+
+path {
+  fill: steelblue;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.brush .extent {
+  stroke: #fff;
+  fill-opacity: .4;
+  shape-rendering: crispEdges;
+}
+
+
+#timeline {
+	position:absolute;
+	top: 500px;
+}
