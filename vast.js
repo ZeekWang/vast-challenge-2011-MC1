@@ -38,7 +38,7 @@ function readData(json){
 		statusesData.push(json[d]);
 		idStatusMap[json[d].id] = json[d];
 	}
-	statusesData = statusesData.slice(0, 1000);
+	statusesData = statusesData.slice(0, 10000);
 }
 
 function computeTimeline(data){
