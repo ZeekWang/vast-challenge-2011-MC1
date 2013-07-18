@@ -37,9 +37,8 @@ $(document).ready(function(){
 
 	});
 	//debug
-	var dataset = [{uid:"fff",time:"00",text:"55545",word:"about a story"},{uid:"fffd",time:"00",text:"55545",word:"just do it"},{uid:"fsf",time:"00",text:"5s5545",word:"find way out"},{uid:"fddff",time:"00",text:"55545",word:"believe yourself"},{uid:"fffffff",time:"00",text:"55545",word:"it is boring"}];
-	draw_list( dataset );
-	draw_wordcloud( dataset );
+	draw_list( dataset1);
+	draw_wordcloud( dataset1 );
 	//debug
 });
 

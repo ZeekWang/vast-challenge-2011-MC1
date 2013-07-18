@@ -15,7 +15,6 @@
 
     <link rel="stylesheet" type="text/css" href="vast.css" />
     <base target="_blank" />
-
 </head>
 
 <body>
@@ -23,7 +22,10 @@
 		<img id="map-img" src="images/map.png"></img>
 	</div>
 	<script type="text/javascript" src="vast.js"></script>
-    <div id="twitter-list"></div>
-    <div id="word-cloud">
+    <div id="twitter-list">
+        <table></table>
+        <button type="button" onClick="draw_list(dataset1)">previous</button>
+        <button type="button" onClick="draw_list(dataset2)">next</button>
     </div>
+    <div id="word-cloud"></div>
 </body>
