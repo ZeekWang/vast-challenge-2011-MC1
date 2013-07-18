@@ -32,15 +32,15 @@ $(document).ready(function(){
 			drawDataOnMap(statusesData);
 			drawTimeline();
 			readWeatherData();
+      draw_list( statusesData);
+      draw_wordcloud( statusesData );
+      //draw_list(dataset1);
+      //draw_wordcloud(dataset1);
+      console.log('drawn');
 		});
 
 
 	});
-	//debug 
-	//these is the two functions to use the twitterlist and wordcloud. 
-	draw_list( dataset1);
-	draw_wordcloud( dataset1 );
-	//debug
 });
 
 function readWeatherData(){
@@ -206,7 +206,7 @@ function drawTimeline(){
 	.y0(height2)
 	.y1(function(d) { return y2(d.value); });
 
-	var svg = d3.select("body").append("svg")
+	var svg = d3.select("#map-wrapper").append("svg")
 	.attr("width", width + margin.left + margin.right)
 	.attr("height", height + margin.top + margin.bottom)
 	.attr("id", "timeline");

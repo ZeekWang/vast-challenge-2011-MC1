@@ -7,8 +7,6 @@
     <script type="text/javascript" src="jquery.tipsy.js"></script>
     
     <script type="text/javascript" src="d3.v2.js"></script>
-    <script type"text/javascript" src="twitter-list.js"></script>
-    <script type"text/javascript" src="word-cloud.js"></script>
     <script type"text/javascript" src="d3.layout.cloud.js"></script>
 
     <script type"text/javascript" src="utils.js"></script>
@@ -21,12 +19,11 @@
 	<div id="map-wrapper">
 		<img id="map-img" src="images/map.png"></img>
 	</div>
-	<script type="text/javascript" src="vast.js"></script>
-    <div id="twitter-list">
-        <!--change the onClick to proper dataset, dataset1&2 are just temp data-->
-        <table></table>
-        <button type="button" onClick="draw_list(dataset1)">previous</button>
-        <button type="button" onClick="draw_list(dataset2)">next</button>
-    </div>
+  <div id='word-list-wrapper'>
+    <div id="twitter-list"></div>
     <div id="word-cloud"></div>
+  </div>
+	<script type="text/javascript" src="vast.js"></script>
+  <script type"text/javascript" src="twitter-list.js"></script>
+  <script type"text/javascript" src="word-cloud.js"></script>
 </body>
