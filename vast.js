@@ -36,7 +36,8 @@ $(document).ready(function(){
 
 
 	});
-	//debug
+	//debug 
+	//these is the two functions to use the twitterlist and wordcloud. 
 	draw_list( dataset1);
 	draw_wordcloud( dataset1 );
 	//debug
