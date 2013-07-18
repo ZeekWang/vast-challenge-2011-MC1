@@ -4,7 +4,8 @@
 }
 
 .status-node{
-	fill: rgba(200, 0, 0, 0.5);
+	fill: rgba(255, 255, 51, 0.8);
+  stroke: #333;
 }
 
 /*timeline*/
@@ -33,14 +34,14 @@
 
 /*tipsy*/
 
-.tipsy { font-size: 12px; position: absolute; padding: 5px; z-index: 100000;;}
-.tipsy-inner { background-color: #CCC; color: black; width: 200px; padding: 5px 8px 4px 8px; }
+.tipsy { font-size: 12px; position: absolute; padding: 5px; z-index: 100000;}
+.tipsy-inner { background-color: rgba(201, 225, 237, 0.9); color: black; width: 200px; padding: 5px 8px 4px 8px; }
 
 /* Rounded corners */
 .tipsy-inner { border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px; }
 
 /* Uncomment for shadow */
-/*.tipsy-inner { box-shadow: 0 0 5px #000000; -webkit-box-shadow: 0 0 5px #000000; -moz-box-shadow: 0 0 5px #000000; }*/
+.tipsy-inner { box-shadow: 0 0 5px #000000; -webkit-box-shadow: 0 0 5px #000000; -moz-box-shadow: 0 0 5px #000000; }
 
 .tipsy-arrow { position: absolute; width: 0; height: 0; line-height: 0; border: 5px dashed #CCC; }
 
@@ -59,7 +60,7 @@
 .tipsy-e .tipsy-arrow { right: 0; top: 50%; margin-top: -5px; border-left-style: solid; border-right: none; border-top-color: transparent; border-bottom-color: transparent; }
 .tipsy-w .tipsy-arrow { left: 0; top: 50%; margin-top: -5px; border-right-style: solid; border-left: none; border-top-color: transparent; border-bottom-color: transparent; }
 
-
+.tip-time {margin-left: 30px;}
 
 
 
@@ -125,4 +126,13 @@ rect {
   position: absolute;
   top: 200px;
   left: 1300px;
+}
+
+
+#heatmap-compare{
+  position: fixed;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
 }

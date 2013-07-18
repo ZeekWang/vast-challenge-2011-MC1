@@ -11,7 +11,7 @@ var timelineBinStatics = [];
 var mapWidth, mapHeight, mapSVG;
 
 $(document).ready(function(){
-
+	$("#heatmap-compare").hide();
 	$("#map-img").load(function(){
 		mapWidth = $("#map-img").width();
 		mapHeight = $("#map-img").height();
@@ -58,6 +58,10 @@ function readWeatherData(){
 
 }
 
+function receiveData(data){
+
+}
+
 function drawWeather(){
 	console.log("draw weather");
 	console.log(weatherData);
@@ -69,7 +73,7 @@ function drawWeather(){
 		.enter()
 		.append("g")
 		.attr("transform", function(d){
-			return "translate(" + ((new Date(d.date).getTime() - startTimeOfData) / 86400000 * 60) + ", 0)"
+			return "translate(" + ((new Date(d.date).getTime() - startTimeOfData) / 86400000 * 60) + ", -10)"
 		});
 
 	group.append("image")
@@ -121,7 +125,7 @@ function readData(json){
 		statusesData.push(json[d]);
 		idStatusMap[json[d].id] = json[d];
 	}
-	statusesData = statusesData.slice(0, 1000);
+	statusesData = statusesData.slice(0, 10000);
 }
 
 function computeTimeline(data){
@@ -222,7 +226,7 @@ function drawTimeline(){
 	.attr("id", "timeline-focus");
 
 	var context = svg.append("g")
-	.attr("transform", "translate(" + margin2.left + "," + margin2.top + ")")
+	.attr("transform", "translate(" + margin2.left + "," + margin2.top+ ")")
 	.attr("id", "timeline-context");
 
 
@@ -299,9 +303,8 @@ function drawTimeline(){
 
 function renderTipHtml(data){
 	var html = "<div class='tip'>" +
-	"<p><b>”√ªßid:" + data.uid + "</b></p>" + 
-	"<p>" + data.text + "</p>" +
-	"<p><span>" + data.time_str + "</span></p>" +
+	"<b>uid:" + data.uid + "</b>" + "<span class='tip-time'>" + data.time_str + "</span></br>" +
+	"" + data.text + "</br>" +
 	"</div>";
 	return html;
 }
