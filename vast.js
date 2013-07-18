@@ -1,4 +1,5 @@
 var fullData = [];
+var weatherData = [];
 var statusesData = [];
 var idStatusMap = [];
 var filterStatuses = [];
@@ -30,25 +31,74 @@ $(document).ready(function(){
 			timelineBinStatics = computeTimeline(statusesData);
 			drawDataOnMap(statusesData);
 			drawTimeline();
+			readWeatherData();
 		});
+
+
 	});
 	//debug
 	var dataset = [{uid:"fff",time:"00",text:"55545",word:"about a story"},{uid:"fffd",time:"00",text:"55545",word:"just do it"},{uid:"fsf",time:"00",text:"5s5545",word:"find way out"},{uid:"fddff",time:"00",text:"55545",word:"believe yourself"},{uid:"fffffff",time:"00",text:"55545",word:"it is boring"}];
 	draw_list( dataset );
 	draw_wordcloud( dataset );
 	//debug
-})
+});
+
+function readWeatherData(){
+	d3.csv("weather.csv", function(d) {
+		d.forEach(function(d){
+			weatherData.push({
+				date: new Date(d.Date),
+				weather: d.Weather,
+				windSpeed: parseInt(d.Average_Wind_Speed),
+				windDirection: parseInt(d.Wind_Angle)  + 180
+			});
+		});
+		drawWeather();
+	});
+
+}
+
+function drawWeather(){
+	console.log("draw weather");
+	console.log(weatherData);
+	var svg = d3.select("#timeline-context");
+	console.log(svg.attr("width"));
+	console.log($("#timeline-context").width());
+	var group = svg.selectAll("g .weather-logo")
+		.data(weatherData)
+		.enter()
+		.append("g")
+		.attr("transform", function(d){
+			return "translate(" + ((new Date(d.date).getTime() - startTimeOfData) / 86400000 * 60) + ", 0)"
+		});
+
+	group.append("image")
+		.attr("xlink:href", function(d){return "images/" + d.weather + ".png"})
+		.attr("width", 20)
+		.attr("height", 20);
+	group.append("image")
+		.attr("xlink:href", function(d){return "images/arrow-up.png"})
+		.attr("width", 20)
+		.attr("height", 20)
+		.attr("transform", function(d){
+			return "translate(25, 0) rotate(" + d.windDirection + ", 10, 10)"
+		});
+
+		
+
+}
 
 function enableMapBrushed(){
 	mapSVG.append("g")
 	.attr("class", "brush")
 	.call(
 		d3.svg.brush()
-			.x(d3.scale.linear().range([0, mapWidth]))
-			.y(d3.scale.linear().range([0, mapHeight]))
-			.on("brushend", brushOnMap)
-	);
+		.x(d3.scale.linear().range([0, mapWidth]))
+		.y(d3.scale.linear().range([0, mapHeight]))
+		.on("brushend", brushOnMap)
+		);
 }
+
 
 function brushOnMap(){
 	var e = d3.event.target.extent();
@@ -59,19 +109,11 @@ function brushOnMap(){
 
 		function(d){
 			if (brushNW[0] >= d.lng && d.lng >= brushSE[0]
-	        && brushNW[1] >= d.lat && d.lat >= brushSE[1]){
+				&& brushNW[1] >= d.lat && d.lat >= brushSE[1]){
 
-	        }
+			}
 
-		})
-	// console.log(brushNW);
-	// console.log(brushSE);
-	// d3.selectAll(".status-node").classed("selected", function(d) {
-	//     return brushNW[0] >= d.lng && d.lng >= brushSE[0]
-	//         && brushNW[1] >= d.lat && d.lat >= brushSE[1];
- //  	});
-
-	// console.log(d3.event.target.extent());
+	})
 }
 
 function readData(json){
@@ -122,24 +164,6 @@ function drawDataOnMap(data){
 
 }
 
-function geoToMap(lat, lng, width, height){
-	var y = mapping(lat, 42.1609, 42.3017, height, 0);
-	var x = mapping(lng, 93.1923, 93.5673, width, 0);
-	return [x, y];
-}
-
-function mapToGeo(x, y, width, height){
-	var lat = mapping(y, 0, height, 42.3017, 42.1609);
-	var lng = mapping(x, 0, width, 93.5673, 93.1923);
-	return [lng, lat];
-}
-
-function mapping(value, min, max, toMin, toMax){
-	value = Math.max(min, value);
-	value = Math.min(max, value);
-	return (value - min) / (max - min) * (toMax - toMin) + toMin;
-}
-
 function drawTimeline(){
 	var margin = {top: 10, right: 10, bottom: 90, left: 40},
 	margin2 = {top: 190, right: 10, bottom: 20, left: 40},
@@ -161,9 +185,9 @@ function drawTimeline(){
 	.range([height2, 0]);
 
 	var xAxis = d3.svg.axis().scale(x).orient("bottom")
-		.ticks(d3.time.hours, 12).tickFormat(d3.time.format("%m.%d %H%p")),
+	.ticks(d3.time.hours, 12).tickFormat(d3.time.format("%m.%d %H%p")),
 	xAxis2 = d3.svg.axis().scale(x2).orient("bottom")
-		.ticks(d3.time.days, 1).tickFormat(d3.time.format("%m.%d")),
+	.ticks(d3.time.days, 1).tickFormat(d3.time.format("%m.%d")),
 	yAxis = d3.svg.axis().scale(y).orient("left");
 
 	var brush = d3.svg.brush()
@@ -194,10 +218,12 @@ function drawTimeline(){
 	.attr("height", height);
 
 	var focus = svg.append("g")
-	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+	.attr("id", "timeline-focus");
 
 	var context = svg.append("g")
-	.attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+	.attr("transform", "translate(" + margin2.left + "," + margin2.top + ")")
+	.attr("id", "timeline-context");
 
 
 	var data = [];
@@ -245,9 +271,9 @@ function drawTimeline(){
 	.attr("height", height2 + 7);
 
 	svg.append("g")
-    .attr("class", "x grid")
-    .attr("transform", "translate(" + margin.left + "," + (margin2.top + height2) + ")")
-    .call(d3.svg.axis().scale(x).tickSubdivide(1).tickSize(-height2));
+	.attr("class", "x grid")
+	.attr("transform", "translate(" + margin.left + "," + (margin2.top + height2) + ")")
+	.call(d3.svg.axis().scale(x).tickSubdivide(1).tickSize(-height2));
 
 
 
@@ -273,9 +299,9 @@ function drawTimeline(){
 
 function renderTipHtml(data){
 	var html = "<div class='tip'>" +
-		"<p><b>用户id:" + data.uid + "</b></p>" + 
-		"<p>" + data.text + "</p>" +
-		"<p><span>" + data.time_str + "</span></p>" +
-		"</div>";
+	"<p><b>用户id:" + data.uid + "</b></p>" + 
+	"<p>" + data.text + "</p>" +
+	"<p><span>" + data.time_str + "</span></p>" +
+	"</div>";
 	return html;
 }
