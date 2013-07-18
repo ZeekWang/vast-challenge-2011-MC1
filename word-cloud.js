@@ -1,34 +1,42 @@
 var dataToShow;
 var fill = d3.scale.category20();
+var maxsize = 30;
+var minsize = 5;
+var upper_bound;
 
 function draw_wordcloud(dataset) {
 	dataToShow=[];
+	upper_bound=1;
 
 	for( var d=0; d<dataset.length; ++d ){
 		for( var s=0; s<dataset[d]["word"].split(" ").length; ++s ) {
 			for( var a=0; a<dataToShow.length; ++a ) {
 				if( dataset[d]["word"].split(" ")[s] == dataToShow[a]["text"] ) {
-					dataToShow[a]["size"]+=10;
+					dataToShow[a]["size"]++;
+					upper_bound=upper_bound>dataToShow[a]["size"]?upper_bound:dataToShow[a]["size"];
 					break;
 				}
 			}
-			dataToShow.push({text: dataset[d]["word"].split(" ")[s], size: 20});
+			if( a==dataToShow.length )
+				dataToShow.push({text: dataset[d]["word"].split(" ")[s], size: 1});
 		}
 	}
 
-	d3.layout.cloud().size([400, 600])
+	d3.layout.cloud().size([500, 500])
       .words(dataToShow)
-      .padding(5)
+      .padding(0)
       .rotate(0)
       .font("Impact")
-      .fontSize(function(d) { return d.size; })
+      .fontSize(function(d) { return (d.size/upper_bound)*25+5; })
       .on("end", draw)
       .start();
 
       function draw(words) {
-	      var debug = d3.select("#wordle");
-	      debug.append("g")
-	        .attr("transform", "translate(100,100)")
+	      d3.select("#word-cloud").append("svg")
+        	.attr("width", 500)
+        	.attr("height", 500)
+	      .append("g")
+	      	.attr( "transform", "translate(250,250)" )
 	      .selectAll("text")
 	        .data(words)
 	      .enter().append("text")
