@@ -15,45 +15,28 @@ $(document).ready(function(){
 		mapWidth = $("#map-img").width();
 		mapHeight = $("#map-img").height();
 		mapSVG = d3.select("#map-wrapper")
-			.append("svg")
-			.attr("id", "map-svg")
-			.attr("width", mapWidth)
-			.attr("height", mapHeight)
+		.append("svg")
+		.attr("id", "map-svg")
+		.attr("width", mapWidth)
+		.attr("height", mapHeight);
 
 		$("#map-svg")
-			.css("left", $("#map-img").position().left)
-			.css("top", $("#map-img").position().top);
+		.css("left", $("#map-img").position().left)
+		.css("top", $("#map-img").position().top);
 
 		enableMapBrushed();
-
-		// d3.json("fulldata.json", function(json) {
-		// 	for (var d in json){
-		// 		fullData.push(json[d]);
-		// 		idStatusMap[json[d].id] = json[d];
-		// 	}
-		// 	fullData = fullData.slice(0, 1000);
-		// 	// timelineBinStatics = computeTimeline(statusesData);
-		// 	// drawDataOnMap(statusesData);
-		// 	// drawTimeline();
-		// 	console.log("fulldata end");
-		// 	var start = new Date();
-		// 	var j = 0
-		// 	for (var i in fullData)
-		// 	{j += fullData[i].uid}
-		// 	console.log(j);
-		// 	console.log(new Date().getTime() - start);
-		// });
-
 		d3.json("data.json", function(json) {
 			readData(json);
 			timelineBinStatics = computeTimeline(statusesData);
 			drawDataOnMap(statusesData);
 			drawTimeline();
-
 		});
-
-
 	});
+	//debug
+	var dataset = [{uid:"fff",time:"00",text:"55545",word:"about a story"},{uid:"fffd",time:"00",text:"55545",word:"just do it"},{uid:"fsf",time:"00",text:"5s5545",word:"find way out"},{uid:"fddff",time:"00",text:"55545",word:"believe yourself"},{uid:"fffffff",time:"00",text:"55545",word:"it is boring"}];
+	draw_list( dataset );
+	draw_wordcloud( dataset );
+	//debug
 })
 
 function enableMapBrushed(){
@@ -290,7 +273,7 @@ function drawTimeline(){
 
 function renderTipHtml(data){
 	var html = "<div class='tip'>" +
-		"<p><b>ç”¨æˆ·id:" + data.uid + "</b></p>" + 
+		"<p><b>ÓÃ»§id:" + data.uid + "</b></p>" + 
 		"<p>" + data.text + "</p>" +
 		"<p><span>" + data.time_str + "</span></p>" +
 		"</div>";
