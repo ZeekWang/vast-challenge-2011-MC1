@@ -90,3 +90,15 @@ rect {
   display: none;
 
 }
+
+#twitter-list {
+  position: absolute;
+  top: 0px;
+  left: 1400px;
+}
+
+#word-cloud {
+  position: absolute;
+  top: 500px;
+  left: 1400px;
+}
