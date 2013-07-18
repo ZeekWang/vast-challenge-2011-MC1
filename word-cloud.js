@@ -22,9 +22,9 @@ function draw_wordcloud(dataset) {
 		}
 	}
 
-	d3.layout.cloud().size([400, 600])
+	d3.layout.cloud().size([500, 500])
       .words(dataToShow)
-      .padding(5)
+      .padding(0)
       .rotate(0)
       .font("Impact")
       .fontSize(function(d) { return (d.size/upper_bound)*25+5; })
@@ -32,9 +32,11 @@ function draw_wordcloud(dataset) {
       .start();
 
       function draw(words) {
-	      var debug = d3.select("#wordle");
-	      debug.append("g")
-	        .attr("transform", "translate(100,100)")
+	      d3.select("#word-cloud").append("svg")
+        	.attr("width", 500)
+        	.attr("height", 500)
+	      .append("g")
+	      	.attr( "transform", "translate(250,250)" )
 	      .selectAll("text")
 	        .data(words)
 	      .enter().append("text")

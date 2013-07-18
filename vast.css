@@ -97,8 +97,9 @@ rect {
   left: 1400px;
 }
 
+
 #word-cloud {
   position: absolute;
-  top: 500px;
-  left: 1400px;
+  top: 200px;
+  left: 1300px;
 }
