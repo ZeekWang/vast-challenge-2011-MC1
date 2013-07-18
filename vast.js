@@ -39,10 +39,6 @@ $(document).ready(function(){
 
 
 	});
-	//debug 
-	//these is the two functions to use the twitterlist and wordcloud. 
-
-	//debug
 });
 
 function readWeatherData(){
@@ -89,9 +85,6 @@ function drawWeather(){
 		.attr("transform", function(d){
 			return "translate(25, 0) rotate(" + d.windDirection + ", 10, 10)"
 		});
-
-		
-
 }
 
 function enableMapBrushed(){
