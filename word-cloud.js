@@ -1,18 +1,24 @@
 var dataToShow;
 var fill = d3.scale.category20();
+var maxsize = 30;
+var minsize = 5;
+var upper_bound;
 
 function draw_wordcloud(dataset) {
 	dataToShow=[];
+	upper_bound=1;
 
 	for( var d=0; d<dataset.length; ++d ){
 		for( var s=0; s<dataset[d]["word"].split(" ").length; ++s ) {
 			for( var a=0; a<dataToShow.length; ++a ) {
 				if( dataset[d]["word"].split(" ")[s] == dataToShow[a]["text"] ) {
-					dataToShow[a]["size"]+=10;
+					dataToShow[a]["size"]++;
+					upper_bound=upper_bound>dataToShow[a]["size"]?upper_bound:dataToShow[a]["size"];
 					break;
 				}
 			}
-			dataToShow.push({text: dataset[d]["word"].split(" ")[s], size: 20});
+			if( a==dataToShow.length )
+				dataToShow.push({text: dataset[d]["word"].split(" ")[s], size: 1});
 		}
 	}
 
@@ -21,7 +27,7 @@ function draw_wordcloud(dataset) {
       .padding(5)
       .rotate(0)
       .font("Impact")
-      .fontSize(function(d) { return d.size; })
+      .fontSize(function(d) { return (d.size/upper_bound)*25+5; })
       .on("end", draw)
       .start();
 
