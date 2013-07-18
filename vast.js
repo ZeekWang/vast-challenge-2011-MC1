@@ -32,14 +32,16 @@ $(document).ready(function(){
 			drawDataOnMap(statusesData);
 			drawTimeline();
 			readWeatherData();
+
+			 draw_list( statusesData );
+			// draw_wordcloud( statusesData );
 		});
 
 
 	});
 	//debug 
 	//these is the two functions to use the twitterlist and wordcloud. 
-	draw_list( dataset1);
-	draw_wordcloud( dataset1 );
+
 	//debug
 });
 
@@ -73,7 +75,7 @@ function drawWeather(){
 		.enter()
 		.append("g")
 		.attr("transform", function(d){
-			return "translate(" + ((new Date(d.date).getTime() - startTimeOfData) / 86400000 * 60) + ", -10)"
+			return "translate(" + ((new Date(d.date).getTime() - startTimeOfData) / 86400000 * 65) + ", -10)"
 		});
 
 	group.append("image")
@@ -125,7 +127,7 @@ function readData(json){
 		statusesData.push(json[d]);
 		idStatusMap[json[d].id] = json[d];
 	}
-	statusesData = statusesData.slice(0, 10000);
+	statusesData = statusesData.slice(0, 1000);
 }
 
 function computeTimeline(data){
@@ -170,10 +172,10 @@ function drawDataOnMap(data){
 
 function drawTimeline(){
 	var margin = {top: 10, right: 10, bottom: 90, left: 40},
-	margin2 = {top: 190, right: 10, bottom: 20, left: 40},
+	margin2 = {top: 150, right: 10, bottom: 20, left: 40},
 	width = mapWidth - margin.left - margin.right,
-	height = 250 - margin.top - margin.bottom,
-	height2 = 250 - margin2.top - margin2.bottom;
+	height = 200 - margin.top - margin.bottom,
+	height2 = 200 - margin2.top - margin2.bottom;
 
 
 	var x = d3.time.scale()
@@ -210,7 +212,7 @@ function drawTimeline(){
 	.y0(height2)
 	.y1(function(d) { return y2(d.value); });
 
-	var svg = d3.select("body").append("svg")
+	var svg = d3.select("body #left-part").append("svg")
 	.attr("width", width + margin.left + margin.right)
 	.attr("height", height + margin.top + margin.bottom)
 	.attr("id", "timeline");
