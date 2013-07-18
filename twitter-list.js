@@ -1,5 +1,5 @@
 var rowNumber;
-var list;
+var list, head;
 var init=0;
 
 function draw_list( dataset ) {
@@ -7,16 +7,22 @@ function draw_list( dataset ) {
 	list = d3.select("#twitter-list").select("table");
 	if(!init) {
 		list = d3.select("#twitter-list").append("table").attr("id","list-table");
-		list.selectAll("tr").data(d3.range(0, rowNumber+1)).enter().append("tr");
+		list.selectAll("tr").data(d3.range(0, rowNumber+1)).enter().append("tr").attr( "class", "content" );
+		list.select("tr").attr( "class", "head" );
 		for(var i=0; i<3; ++i){
-			list.selectAll("tr").append("td");
+			list.selectAll(".head").append("th");
+			list.selectAll(".content").append("td");
 		}
 		init=1;
 	}
-	d3.selectAll("tr").selectAll("td")
+	d3.selectAll(".head").selectAll("th")
 		.data( function(d) {
-			if(d==0) return ["uid","time","text"];
-			else return [dataset[d-1]["uid"],dataset[d-1]["time"],dataset[d-1]["text"]];
+			return["uid","time","text"];
+		})
+		.text( String );
+	d3.selectAll(".content").selectAll("td")
+		.data( function(d) {
+			return [dataset[d-1]["uid"],dataset[d-1]["time"],dataset[d-1]["text"]];
 		})
 		.text( String );
 }
