@@ -63,8 +63,32 @@ function enableMapBrushed(){
 		d3.svg.brush()
 			.x(d3.scale.linear().range([0, mapWidth]))
 			.y(d3.scale.linear().range([0, mapHeight]))
-			.on("brushend", function(){console.log(d3.event.target.extent());})
+			.on("brushend", brushOnMap)
 	);
+}
+
+function brushOnMap(){
+	var e = d3.event.target.extent();
+	brushNW = mapToGeo(e[0][0], e[0][1], 1, 1),
+	brushSE = mapToGeo(e[1][0], e[1][1], 1, 1);
+
+	d3.selectAll(".status-node").each(
+
+		function(d){
+			if (brushNW[0] >= d.lng && d.lng >= brushSE[0]
+	        && brushNW[1] >= d.lat && d.lat >= brushSE[1]){
+
+	        }
+
+		})
+	// console.log(brushNW);
+	// console.log(brushSE);
+	// d3.selectAll(".status-node").classed("selected", function(d) {
+	//     return brushNW[0] >= d.lng && d.lng >= brushSE[0]
+	//         && brushNW[1] >= d.lat && d.lat >= brushSE[1];
+ //  	});
+
+	// console.log(d3.event.target.extent());
 }
 
 function readData(json){
@@ -97,7 +121,7 @@ function drawDataOnMap(data){
 	.attr("class", "status-node")
 	.attr("r", 5)
 	.attr("transform", function(d){
-		var pos = geoMapping(d.lat, d.lng, mapWidth, mapHeight);
+		var pos = geoToMap(d.lat, d.lng, mapWidth, mapHeight);
 		return "translate(" + pos[0] + "," + pos[1] + ")";
 	})
 	.each(function(d){
@@ -115,10 +139,16 @@ function drawDataOnMap(data){
 
 }
 
-function geoMapping(lat, lng, width, height){
+function geoToMap(lat, lng, width, height){
 	var y = mapping(lat, 42.1609, 42.3017, height, 0);
 	var x = mapping(lng, 93.1923, 93.5673, width, 0);
 	return [x, y];
+}
+
+function mapToGeo(x, y, width, height){
+	var lat = mapping(y, 0, height, 42.3017, 42.1609);
+	var lng = mapping(x, 0, width, 93.5673, 93.1923);
+	return [lng, lat];
 }
 
 function mapping(value, min, max, toMin, toMax){
@@ -147,8 +177,10 @@ function drawTimeline(){
 	var y2 = d3.scale.linear()
 	.range([height2, 0]);
 
-	var xAxis = d3.svg.axis().scale(x).orient("bottom"),
-	xAxis2 = d3.svg.axis().scale(x2).orient("bottom"),
+	var xAxis = d3.svg.axis().scale(x).orient("bottom")
+		.ticks(d3.time.hours, 12).tickFormat(d3.time.format("%m.%d %H%p")),
+	xAxis2 = d3.svg.axis().scale(x2).orient("bottom")
+		.ticks(d3.time.days, 1).tickFormat(d3.time.format("%m.%d")),
 	yAxis = d3.svg.axis().scale(y).orient("left");
 
 	var brush = d3.svg.brush()
@@ -228,6 +260,12 @@ function drawTimeline(){
 	.selectAll("rect")
 	.attr("y", -6)
 	.attr("height", height2 + 7);
+
+	svg.append("g")
+    .attr("class", "x grid")
+    .attr("transform", "translate(" + margin.left + "," + (margin2.top + height2) + ")")
+    .call(d3.svg.axis().scale(x).tickSubdivide(1).tickSize(-height2));
+
 
 
 	function brush() {
