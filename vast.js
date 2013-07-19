@@ -106,21 +106,20 @@ function enableMapBrushed(){
 		);
 }
 
-
 function brushOnMap(){
 	var e = d3.event.target.extent();
 	brushNW = mapToGeo(e[0][0], e[0][1], 1, 1),
 	brushSE = mapToGeo(e[1][0], e[1][1], 1, 1);
 
+  var statusList = [];
 	d3.selectAll(".status-node").each(
-
 		function(d){
 			if (brushNW[0] >= d.lng && d.lng >= brushSE[0]
 				&& brushNW[1] >= d.lat && d.lat >= brushSE[1]){
-
+          statusList.push(d);
 			}
-
 	})
+  draw_wordcloud(statusList);
 }
 
 function readData(json){
@@ -283,7 +282,6 @@ function drawTimeline(){
 	.call(d3.svg.axis().scale(x).tickSubdivide(1).tickSize(-height2));
 
 
-
 	function brush() {
 		x.domain(brush.empty() ? x2.domain() : brush.extent());
 		focus.select("path").attr("d", area);
@@ -291,14 +289,18 @@ function drawTimeline(){
 		console.log(brush.extent());
 		var beginTime = brush.extent()[0].getTime();
 		var endTime = brush.extent()[1].getTime();
+    var selectedData  = [];
 		$("#map-wrapper circle").each(function(d){
 			var time = $(this)[0].__data__.time;
 			if (time < beginTime || time > endTime)
 				$(this).hide();
-			else
+			else{
 				$(this).show();
+        selectedData.push($(this)[0].__data__);
+      }
 		});
-
+    // Refresh the word-cloud.
+    draw_wordcloud(selectedData);
 	}
 
 }
