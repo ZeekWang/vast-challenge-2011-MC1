@@ -12,6 +12,13 @@ var mapWidth, mapHeight, mapSVG;
 
 $(document).ready(function(){
 	$("#heatmap-compare").hide();
+	$("#cancle-heatmap-button").click(function(){
+		$("#heatmap-compare").hide();
+	})
+	$("#create-heatmap-button").click(function(){
+		toCreateComapreHeatmap();
+	})
+
 	$("#map-img").load(function(){
 		mapWidth = $("#map-img").width();
 		mapHeight = $("#map-img").height();
@@ -65,25 +72,26 @@ function drawWeather(){
 	console.log(weatherData);
 	var svg = d3.select("#timeline-context");
 	console.log(svg.attr("width"));
-	console.log($("#timeline-context").width());
+	var w = $($("#timeline-context .brush rect")[0]).attr("width");
+	console.log(w / 21);
 	var group = svg.selectAll("g .weather-logo")
 		.data(weatherData)
 		.enter()
 		.append("g")
 		.attr("transform", function(d){
-			return "translate(" + ((new Date(d.date).getTime() - startTimeOfData) / 86400000 * 65) + ", -10)"
+			return "translate(" + ((new Date(d.date).getTime() - startTimeOfData) / 86400000 * w / 21) + ", -10)"
 		});
 
 	group.append("image")
 		.attr("xlink:href", function(d){return "images/" + d.weather + ".png"})
-		.attr("width", 20)
-		.attr("height", 20);
+		.attr("width", 18)
+		.attr("height", 18);
 	group.append("image")
 		.attr("xlink:href", function(d){return "images/arrow-up.png"})
-		.attr("width", 20)
-		.attr("height", 20)
+		.attr("width", 18)
+		.attr("height", 18)
 		.attr("transform", function(d){
-			return "translate(25, 0) rotate(" + d.windDirection + ", 10, 10)"
+			return "translate(20, 0) rotate(" + d.windDirection + ", 10, 10)"
 		});
 }
 
@@ -302,4 +310,9 @@ function renderTipHtml(data){
 	"" + data.text + "</br>" +
 	"</div>";
 	return html;
+}
+
+function toCreateComapreHeatmap(){
+	console.log("click");
+	createCompareImage(statusesData);
 }

@@ -9,7 +9,6 @@ function createCompareImage(data){
 			"<div id='heatmap-compare-map" + i + "' class='heatmap-compare-map'>" +
 			"<canvas id='heatmap-compare-img" + i + "' class='heatmap-compare-img'></canvas>" +
 			"<img src='images/map.png' id='heatmap-compare-map-img" + i + "' class='heat-compare-map-img'></img></div>"
-			
 		)
 		$("#heatmap-compare-img" + i)[0].width = imgWidth;
 		$("#heatmap-compare-img" + i)[0].height = imgHeight;
@@ -26,8 +25,23 @@ function createCompareImage(data){
 			height: imgHeight,
 			"z-index": -1
 		})
-
 	}
+
+	$("#heatmap-compare").scroll(function(){
+		// console.log("sss");
+		// for (var i = 0; i < 7; i++){
+		// 	var offset = $("#heatmap-compare-img" + i).offset();
+		// 	console.log(offset);
+		// 	$("#heatmap-compare-map-img" + i).css({
+		// 		position: "absolute",
+		// 		top: offset.top,
+		// 		left: offset.left,
+		// 		width: imgWidth,
+		// 		height: imgHeight,
+		// 		"z-index": -1
+		// 	})
+		// }
+	})
 
 	var binData =  [];
 
