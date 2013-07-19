@@ -41,7 +41,7 @@
 	};
 
 	var config = {};
-	var cellSize = 2, colorizeThreshold = 30;
+	var cellSize = 1, colorizeThreshold = 30;
 	var colorR = [], colorG = [], colorB = [], colorA = [];
 	var width, height, sigma, radius, halfRadius, ctx;
 	var kernel, density;
@@ -84,7 +84,7 @@
 			colorR[i] = Math.max(Math.round(128 * Math.sin((i / 256 - 0.5 )* Math.PI) + 127), 0);
 			colorG[i] = Math.max(Math.round(128 * Math.sin((i / 128 - 0.5 )* Math.PI) + 127), 0);
 			colorB[i] = Math.max(Math.round(128 * Math.sin((i / 256 + 0.5 )* Math.PI) + 127), 0);
-			colorA[i] = Math.max(Math.round(128 * Math.sin((i / 256 - 0.5 )* Math.PI) + 127), 0);
+			colorA[i] = Math.max(  Math.abs(Math.round(256 * Math.sin((i / 256 + 0.5)* Math.PI) )), 0);
 		}
 	}
 
@@ -121,10 +121,7 @@
 		createKernel();
 	}
 
-	heatmap.draw = function(nodes){
-		//**********ATTENTION****************
-		heatmap.setSize($("#heatmap-canvas")[0].width, $("#heatmap-canvas")[0].height);
-		//*************************************
+	heatmap.computeDensity = function(nodes){
 		tnodes = nodes;
 		var begin = new Date().getTime();
 		density = [];
@@ -132,6 +129,7 @@
 			for (var j = 0; j < width; j++){
 				density[i * width + j] = 0;
 			}
+		console.log(density.length);
 		var maxValue = 0;
 		for (var ni = 0; ni < nodes.length; ni++){
 			var n = nodes[ni];
@@ -152,8 +150,49 @@
 		}
 		if (ismaxDensityFixed)
 			maxValue = maxDensityValue;
+		return [density, maxValue];
+	}
 
-		console.log("maxValue：" + maxValue);
+	heatmap.unifyDensity = function(density, maxValue){
+		for (var i = 0; i < density.length; i++)
+			density[i] /= maxValue;
+		return density;
+	}
+
+	heatmap.drawByDensity = function(density){
+
+		var image = ctx.createImageData(width * cellSize, height * cellSize);
+		var imageData = image.data;
+		var w = width * cellSize, h = height * cellSize;
+		var count = 0;
+		for (var i = 0; i < width; i++)
+			for (var j = 0; j < height; j++){
+				//var d = Math.round(simpleMap(Math.pow(density[j * width + i], 0.4), Math.pow(maxValue, 0.4), 255));
+				var d = Math.round(density[j * width + i] * 128 + 128);
+				// if (d < colorizeThreshold)
+				// 	continue;
+				count++;
+				for (var m = 0; m < cellSize; m++)
+					for (var n = 0; n < cellSize; n++){
+						var index = ((j * cellSize + n) * w + (i * cellSize + m)) * 4;
+						imageData[index] = colorR[d];
+						imageData[index + 1] = colorG[d];
+						imageData[index + 2] = colorB[d];
+						imageData[index + 3] = colorA[d];
+					}
+			}
+		ctx.putImageData(image, 0, 0);
+
+	}
+
+	heatmap.draw = function(nodes){
+		//**********ATTENTION****************
+		heatmap.setSize($("#heatmap-canvas")[0].width, $("#heatmap-canvas")[0].height);
+		//*************************************
+		var res = heatmap.computeDensity(nodes);
+		var density = res[0];
+		var maxValue = res[1];
+
 		var image = ctx.createImageData(width * cellSize, height * cellSize);
 		var imageData = image.data;
 		var w = width * cellSize, h = height * cellSize;
@@ -177,6 +216,7 @@
 
 		console.log(new Date().getTime() - begin);
 		ctx.putImageData(image, 0, 0);
+
 	}
 
 	heatmap.fixMaxDensity = function(maxDensity){
