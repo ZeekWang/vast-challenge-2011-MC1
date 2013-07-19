@@ -41,7 +41,7 @@ $(document).ready(function(){
 			readWeatherData();
 
 			 draw_list( statusesData );
-			// draw_wordcloud( statusesData );
+			 draw_wordcloud( statusesData );
 		});
 
 

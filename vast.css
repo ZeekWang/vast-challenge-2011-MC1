@@ -153,9 +153,12 @@ rect {
 
 
 #word-cloud {
-  float: right;
   height: 400px;
-  width: 30%;
+}
+
+#word-cloud span {
+	cursor: pointer;
+	float:left;
 }
 
 
