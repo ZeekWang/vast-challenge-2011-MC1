@@ -69,7 +69,6 @@ function receiveData(data){
 
 function drawWeather(){
 	console.log("draw weather");
-	console.log(weatherData);
 	var svg = d3.select("#timeline-context");
 	console.log(svg.attr("width"));
 	var w = $($("#timeline-context .brush rect")[0]).attr("width");
@@ -127,7 +126,15 @@ function readData(json){
 		statusesData.push(json[d]);
 		idStatusMap[json[d].id] = json[d];
 	}
-	statusesData = statusesData.slice(0, 1000);
+	selectData();
+}
+
+function selectData(){
+	var temp = [];
+	var step = Math.round(statusesData.length / 8000);
+	for (var i = 0; i < statusesData.length; i += step)
+		temp.push(statusesData[i]);
+	statusesData = temp;
 }
 
 function computeTimeline(data){
@@ -286,9 +293,12 @@ function drawTimeline(){
 		x.domain(brush.empty() ? x2.domain() : brush.extent());
 		focus.select("path").attr("d", area);
 		focus.select(".x.axis").call(xAxis);
-		console.log(brush.extent());
 		var beginTime = brush.extent()[0].getTime();
 		var endTime = brush.extent()[1].getTime();
+		if (beginTime == endTime){
+			beginTime = 0;
+			endTime = new Date("2013-01-01").getTime();
+		}
     var selectedData  = [];
 		$("#map-wrapper circle").each(function(d){
 			var time = $(this)[0].__data__.time;
@@ -315,6 +325,5 @@ function renderTipHtml(data){
 }
 
 function toCreateComapreHeatmap(){
-	console.log("click");
 	createCompareImage(statusesData);
 }

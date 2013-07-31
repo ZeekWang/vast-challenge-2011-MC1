@@ -93,8 +93,8 @@
 
 var dataToShow;
 var fill = d3.scale.category20();
-var maxsize = 15;
-var minsize = 20;
+var maxsize = 40;
+var minsize = 15;
 var upper_bound;
 var width = $('#word-cloud').width();
 var height = $('#word-cloud').height();
@@ -109,6 +109,8 @@ function draw_wordcloud(dataset) {
 	for(var d=0; d<dataset.length; ++d ){
     var wordArray = dataset[d]['words'].split(' ');
 		for(var s = 0; s < wordArray.length; s++) {
+			if (wordArray[s] == "")
+				continue;
       if (dataToShow[wordArray[s]] == undefined) {
         dataToShow[wordArray[s]] = {};
         dataToShow[wordArray[s]].text = wordArray[s];
@@ -155,11 +157,15 @@ function draw_wordcloud(dataset) {
     .domain([tmpArray[cnt-1].size, tmpArray[0].size]);
 
   $.fn.tagcloud.defaults = {
-      size: {start: minsize, end: maxsize, unit: 'pt'},
-        color: {start: '#cde', end: '#f52'}
+      size: {start: minsize, end: maxsize, unit: 'px'},
+        color: {start: '#777', end: '#777'}
   };
 
   $('#word-cloud span').tagcloud();
-
+  $('#word-cloud span').click(function(e){
+  	var text = e.target.innerText.replace(" ", "");
+  	console.log(text);
+  	
+  })
 }
 

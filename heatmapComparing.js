@@ -1,4 +1,9 @@
 function createCompareImage(data){
+	var step = Math.round(data.length / 1000);
+	var tpData = [];
+	for (var i = 0; i < data.length; i += step)
+		tpData.push(data[i]);
+	data = tpData;
 	var imgHeight = 300;
 	var imgWidth = 590;
 	$("#heatmap-compare").show();

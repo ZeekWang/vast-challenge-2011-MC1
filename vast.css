@@ -3,12 +3,12 @@
   left: 0px;
   top: 0px;
   bottom: 0px;
-  right: 250px;
+  right: 450px;
 }
 
 #right-part{
   position: absolute;
-  width: 250px;
+  width: 400px;
   top: 0px;
   right: 0px;
   bottom: 0px;
@@ -108,8 +108,9 @@
   fill: #fff;
 }
 
-rect {
-  fill: #ddd;
+.extent{
+  fill: rgba(220,220,220,0.5);
+  stroke: rgba(20, 20, 20, 0.8);
 }
 .grid line {
   stroke: #555;
@@ -125,10 +126,12 @@ rect {
 
 }
 #twitter-list {
-  height: 500px;
+  height: 60%;
   overflow: scroll;
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  box-shadow: 0 0 1px #555;
 }
+
 #twitter-list table {
   border-collapse: collapse;
   border: 1px solid #aaa;
@@ -153,12 +156,17 @@ rect {
 
 
 #word-cloud {
-  height: 400px;
+  overflow: hidden;
+  height: 35%;
+
 }
 
 #word-cloud span {
 	cursor: pointer;
-	float:left;
+/*	float:left;*/
+  margin-left: 2px;
+  margin-right: 2px;
+
 }
 
 
